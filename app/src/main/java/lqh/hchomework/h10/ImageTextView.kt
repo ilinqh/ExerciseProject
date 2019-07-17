@@ -66,13 +66,26 @@ class ImageTextView(context: Context, attr: AttributeSet) : View(context, attr) 
             val textTop = yOffset + metrics.ascent
             val textBottom = yOffset + metrics.descent
             usableWidth = if (textTop > IMAGE_PADDING && textTop < IMAGE_PADDING + IMAGE_WIDTH ||
-                textBottom > IMAGE_PADDING && textBottom < IMAGE_PADDING + IMAGE_WIDTH) {
+                textBottom > IMAGE_PADDING && textBottom < IMAGE_PADDING + IMAGE_WIDTH
+            ) {
                 width - IMAGE_WIDTH
             } else {
                 width
             }
+            /**
+             * breakText(CharSequence text, int start, int end, boolean measureForwards, float maxWidth, float[] measuredWidth)
+             *
+             * 方法说明： 设置一个最大宽度，在不超过这个宽度的范围内返回实际测量值否则停止测量
+             *
+             * text表示我们的字符串
+             * start表示从第几个字符串开始测量
+             * end表示从测量到第几个字符串为止
+             * measureForwards表示向前还是向后测量；
+             * maxWidth表示一个给定的最大宽度在这个宽度内能测量出几个字符；
+             * measuredWidth为一个可选项，可以为空，不为空时返回真实的测量值
+             */
             count = paint.breakText(text, start, length, true, usableWidth.toFloat(), measuredWidth)
-            canvas.drawText(text, start,start + count, 0f, yOffset, paint)
+            canvas.drawText(text, start, start + count, 0f, yOffset, paint)
             start += count
             yOffset += paint.fontSpacing
         }
