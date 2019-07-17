@@ -1,11 +1,10 @@
-package lqh.hchomework.h09.view
+package lqh.hchomework.h09
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import lqh.hchomework.R
-import lqh.hchomework.h09.Utils
+import lqh.hchomework.Utils
 
 /**
  * 功能：圆形头像
@@ -31,7 +30,7 @@ class AvatarView(context: Context, attr: AttributeSet) : View(context, attr) {
     private val border = RectF()
 
     init {
-        avatar = getAvatar((RADIUS * 2).toInt())
+        avatar = Utils.getAvatar(resources, (RADIUS * 2).toInt())
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -57,16 +56,6 @@ class AvatarView(context: Context, attr: AttributeSet) : View(context, attr) {
         paint.xfermode = null
 
         canvas.restoreToCount(saved)
-    }
-
-    private fun getAvatar(width: Int): Bitmap {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        BitmapFactory.decodeResource(resources, R.drawable.avatar_savage, options)
-        options.inJustDecodeBounds = false
-        options.inDensity = options.outWidth
-        options.inTargetDensity = width
-        return BitmapFactory.decodeResource(resources, R.drawable.avatar_savage, options)
     }
 
 }

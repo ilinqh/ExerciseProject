@@ -1,4 +1,4 @@
-package lqh.hchomework.h09.view
+package lqh.hchomework.h09
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import lqh.hchomework.h09.Utils
+import lqh.hchomework.Utils
 
 
 /**

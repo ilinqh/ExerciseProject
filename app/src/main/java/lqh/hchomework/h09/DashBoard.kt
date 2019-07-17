@@ -1,10 +1,10 @@
-package lqh.hchomework.h09.view
+package lqh.hchomework.h09
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import lqh.hchomework.h09.Utils
+import lqh.hchomework.Utils
 
 /**
  * 功能：刻度盘
