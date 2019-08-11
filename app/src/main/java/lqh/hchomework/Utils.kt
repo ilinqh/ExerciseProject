@@ -42,6 +42,9 @@ class Utils {
             options.inTargetDensity = width
             return BitmapFactory.decodeResource(res, R.drawable.avatar_savage, options)
         }
+
+        fun getZForCamera() = -6 * Resources.getSystem().displayMetrics.density
+
     }
 
 }
