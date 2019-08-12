@@ -28,12 +28,16 @@ class CameraView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private val bitmap: Bitmap
 
-    private val radius: Float = 15f
+    var radius: Float = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     init {
         bitmap = Utils.getAvatar(resources, IMAGE_WIDTH)
 
-        camera.rotateX(30f)
+        camera.rotateX(45f)
         // 三维旋转需要做多这一步处理，避免一些高密度手机出现糊脸效果
         camera.setLocation(0f, 0f, getZForCamera())
     }

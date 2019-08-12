@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <lqh.hchomework.h10.CameraView
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
