@@ -18,3 +18,6 @@
 
 6. CameraView<br>
 ![CameraView](https://github.com/savage-lin/ExerciseProject/raw/master/images/CameraView.png)
+
+7. TagLayout<br>
+![TagLayout](https://github.com/savage-lin/ExerciseProject/raw/master/images/TagLayout.png)
