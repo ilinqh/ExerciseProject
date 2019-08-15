@@ -22,7 +22,7 @@ class TagLayout @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, def) {
 
     // 子控件位置信息
-    val childrenBounds by lazy {
+    private val childrenBounds by lazy {
         ArrayList<Rect>()
     }
 
@@ -43,9 +43,12 @@ class TagLayout @JvmOverloads constructor(
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)
+            val layoutParams = child.layoutParams as MarginLayoutParams
+            val childMarginStart = layoutParams.marginStart
+            val childMarginEnd = layoutParams.marginEnd
 
             if (widthMode != MeasureSpec.UNSPECIFIED &&
-                lineWidthUsed + child.measuredWidth > widthSize
+                lineWidthUsed + child.measuredWidth + childMarginStart + childMarginEnd > widthSize
             ) {
                 lineWidthUsed = 0
                 heightUsed += lineHeight
@@ -60,13 +63,13 @@ class TagLayout @JvmOverloads constructor(
                 childrenBounds.add(childBounds)
             }
             childBounds.set(
-                lineWidthUsed,
+                lineWidthUsed + childMarginStart,
                 heightUsed,
-                lineWidthUsed + child.measuredWidth,
+                lineWidthUsed + child.measuredWidth + childMarginEnd,
                 heightUsed + child.measuredHeight
             )
 
-            lineWidthUsed += child.measuredWidth
+            lineWidthUsed += child.measuredWidth + childMarginStart + childMarginEnd
             widthUsed = Math.max(widthUsed, lineWidthUsed)
             lineHeight = Math.max(lineHeight, child.measuredHeight)
         }
