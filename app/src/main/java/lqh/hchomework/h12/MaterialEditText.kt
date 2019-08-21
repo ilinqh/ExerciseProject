@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
+import lqh.hchomework.R
 import lqh.hchomework.Utils
 
 /**
@@ -42,18 +43,7 @@ class MaterialEditText @JvmOverloads constructor(
     var useFloatingLabel: Boolean = true
         set(value) {
             field = value
-            background.getPadding(backgroundPadding)
-            if (value) {
-                setPadding(
-                    backgroundPadding.left, (backgroundPadding.top + TEXT_SIZE + TEXT_MARGIN).toInt(),
-                    backgroundPadding.right, backgroundPadding.bottom
-                )
-            } else {
-                setPadding(
-                    backgroundPadding.left, backgroundPadding.top,
-                    backgroundPadding.right, backgroundPadding.bottom
-                )
-            }
+            resetPadding(value)
             invalidate()
         }
 
@@ -72,8 +62,14 @@ class MaterialEditText @JvmOverloads constructor(
     }
 
     init {
-        setPadding(paddingStart, (paddingTop + TEXT_SIZE + TEXT_MARGIN).toInt(), paddingEnd, paddingBottom)
+        val typeArray = context.obtainStyledAttributes(attrs, R.styleable.MaterialEditText)
+        useFloatingLabel = typeArray.getBoolean(R.styleable.MaterialEditText_useFloatingLabel, true)
+        typeArray.recycle()
+
         paint.textSize = TEXT_SIZE
+
+        resetPadding(useFloatingLabel)
+
         addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
@@ -101,6 +97,21 @@ class MaterialEditText @JvmOverloads constructor(
             canvas.drawText(
                 hint.toString(), paddingStart.toFloat(),
                 VERTICAL_OFFSET - VERTICAL_OFFSET_EXTRA * floatingLabelFraction, paint
+            )
+        }
+    }
+
+    private fun resetPadding(useFloatingLabel: Boolean) {
+        background.getPadding(backgroundPadding)
+        if (useFloatingLabel) {
+            setPadding(
+                backgroundPadding.left, (backgroundPadding.top + TEXT_SIZE + TEXT_MARGIN).toInt(),
+                backgroundPadding.right, backgroundPadding.bottom
+            )
+        } else {
+            setPadding(
+                backgroundPadding.left, backgroundPadding.top,
+                backgroundPadding.right, backgroundPadding.bottom
             )
         }
     }
