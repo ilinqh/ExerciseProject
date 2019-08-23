@@ -79,14 +79,18 @@ class ScalableImageView @JvmOverloads constructor(
                 }
 
                 override fun onDoubleTap(e: MotionEvent): Boolean {
-                    isBig = !isBig
-                    if (isBig) {
-                        offsetX = (e.x - width / 2f) * (1 - bigScale / smallScale)
-                        offsetY = (e.y - height / 2f) * (1 - bigScale / smallScale)
-                        fixOffsets()
-                        animator.start()
+                    if (!isBig) {
+                        val whiteHeight = (height - bitmap.height * smallScale) / 2f
+                        if (e.y > whiteHeight && e.y < height - whiteHeight) {
+                            offsetX = (e.x - width / 2f) * (1 - bigScale / smallScale)
+                            offsetY = (e.y - height / 2f) * (1 - bigScale / smallScale)
+                            fixOffsets()
+                            animator.start()
+                            isBig = !isBig
+                        }
                     } else {
                         animator.reverse()
+                        isBig = !isBig
                     }
                     return super.onDoubleTap(e)
                 }
