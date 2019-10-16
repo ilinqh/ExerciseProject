@@ -3,7 +3,6 @@ package lqh.hchomework.h15
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -12,8 +11,6 @@ import android.widget.ImageView
 import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
 import lqh.hchomework.Utils
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * 功能：可缩放的 ImageView
@@ -95,4 +92,6 @@ class ScalableImageView @JvmOverloads constructor(
                     return super.onDoubleTap(e)
                 }
 
+            }
+    }
 }
