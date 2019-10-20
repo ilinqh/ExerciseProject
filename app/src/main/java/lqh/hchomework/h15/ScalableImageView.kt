@@ -113,4 +113,83 @@ class ScalableImageView @JvmOverloads constructor(
                     return super.onDoubleTap(e)
                 }
 
+                override fun onScroll(
+                    downEvent: MotionEvent,
+                    event: MotionEvent,
+                    distanceX: Float,
+                    distanceY: Float
+                ): Boolean {
+                    if (isBig) {
+                        offsetX -= distanceX
+                        offsetY -= distanceY
+                        fixOffsets()
+                        invalidate()
+                    }
+                    return super.onScroll(downEvent, event, distanceX, distanceY)
+                }
+
+                override fun onFling(
+                    e1: MotionEvent?,
+                    e2: MotionEvent?,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+                    if (isBig) {
+                        scroller.fling(
+                            offsetX.toInt(), offsetY.toInt(), velocityX.toInt(), velocityY.toInt(),
+                            (-(bitmap.width * bigScale - width) / 2).toInt(),
+                            ((bitmap.width * bigScale - width) / 2).toInt(),
+                            (-(bitmap.height * bigScale - height) / 2).toInt(),
+                            ((bitmap.height * bigScale - height) / 2).toInt(),
+                            100, 100
+                        )
+                        postOnAnimation(this@ScalableImageView)
+                    }
+                    return super.onFling(e1, e2, velocityX, velocityY)
+                }
+            })
+        scaleDetector = ScaleGestureDetector(context, scaleListener)
+    }
+
+    private fun fixOffsets() {
+        offsetX = min(offsetX, (bitmap.width * bigScale - width) / 2f)
+        offsetX = max(offsetX, -(bitmap.width * bigScale - width) / 2f)
+        offsetY = min(offsetY, (bitmap.height * bigScale - height) / 2f)
+        offsetY = max(offsetY, -(bitmap.height * bigScale - height) / 2f)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return detector.onTouchEvent(event)
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        originalOffsetX = (width - bitmap.width) / 2f
+        originalOffsetY = (height - bitmap.height) / 2f
+
+        smallScale = min(width.toFloat() / bitmap.width, height.toFloat() / bitmap.height)
+        bigScale = max(
+            width.toFloat() / bitmap.width,
+            height.toFloat() / bitmap.height
+        ) * OVER_SCALE_FACTOR
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction)
+        // 在 View 的中心画头像
+        val scale = smallScale + (bigScale - smallScale) * scaleFraction
+        canvas.scale(scale, scale, width / 2f, height / 2f)
+        canvas.drawBitmap(bitmap, originalOffsetX, originalOffsetY, paint)
+    }
+
+    override fun run() {
+        if (scroller.computeScrollOffset()) {
+            offsetX = scroller.currX.toFloat()
+            offsetY = scroller.currY.toFloat()
+            invalidate()
+            postOnAnimation(this@ScalableImageView)
+        }
+    }
 }
