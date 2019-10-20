@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.util.AttributeSet
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import lqh.hchomework.Utils
 import java.util.*
 
@@ -21,8 +21,11 @@ import java.util.*
  * 更新历史
  * 编号|更新日期|更新人|更新内容
  */
-class ColoredTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, def: Int = 0) :
-    TextView(context, attrs, def) {
+class ColoredTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    def: Int = 0
+) : AppCompatTextView(context, attrs, def) {
 
     companion object {
         private val COLORS = intArrayOf(
@@ -52,7 +55,15 @@ class ColoredTextView @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), CORNER_RADIUS, CORNER_RADIUS, paint)
+        canvas.drawRoundRect(
+            0f,
+            0f,
+            width.toFloat(),
+            height.toFloat(),
+            CORNER_RADIUS,
+            CORNER_RADIUS,
+            paint
+        )
         super.onDraw(canvas)
     }
 

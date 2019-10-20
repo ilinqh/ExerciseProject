@@ -8,8 +8,9 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.ImageView
+import android.view.ScaleGestureDetector
 import android.widget.OverScroller
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.GestureDetectorCompat
 import lqh.hchomework.Utils
 import kotlin.math.max
@@ -29,7 +30,7 @@ class ScalableImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     def: Int = 0
-) : ImageView(context, attrs, def), Runnable {
+) : AppCompatImageView(context, attrs, def), Runnable {
 
     companion object {
         private val IMAGE_WIDTH = Utils.dp2px(300f)
@@ -55,6 +56,23 @@ class ScalableImageView @JvmOverloads constructor(
     private val bitmap: Bitmap
 
     private val detector: GestureDetectorCompat
+
+    private val scaleDetector: ScaleGestureDetector
+    private val scaleListener by lazy {
+        object : ScaleGestureDetector.OnScaleGestureListener{
+            override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+                return true
+            }
+
+            override fun onScaleEnd(detector: ScaleGestureDetector?) {
+            }
+
+            override fun onScale(detector: ScaleGestureDetector?): Boolean {
+                return false
+            }
+
+        }
+    }
 
     private var scaleFraction = 0f
         set(value) {
