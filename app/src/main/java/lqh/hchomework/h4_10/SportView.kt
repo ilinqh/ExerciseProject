@@ -14,7 +14,7 @@ import lqh.hchomework.Utils
  * -------------------------------------------------------------------------------------------------
  * 创建者：@author lqh
  * -------------------------------------------------------------------------------------------------
- * 创建日期：2019/10/21
+ * 创建日期：2019/10/18
  * -------------------------------------------------------------------------------------------------
  * 更新历史
  * 编号|更新日期|更新人|更新内容
@@ -22,15 +22,19 @@ import lqh.hchomework.Utils
 class SportView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     companion object {
-        private val RING_WIDTH = Utils.dp2px(20f)
         private val RADIUS = Utils.dp2px(150f)
+        private val RING_WIDTH = Utils.dp2px(20f)
         private val CIRCLE_COLOR = Color.parseColor("#90A4AE")
         private val HIGHLIGHT_COLOR = Color.parseColor("#FF4081")
+
         private const val text = "good"
+
+        private val fontMetrics = Paint.FontMetrics()
     }
 
+    private val bound = Rect()
+
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val metrics = Paint.FontMetrics()
 
     init {
         paint.textSize = Utils.dp2px(100f)
