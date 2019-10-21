@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <lqh.hchomework.h4_09.AvatarView
+    <lqh.hchomework.h4_10.CameraView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
