@@ -1,10 +1,7 @@
 package lqh.hchomework.h4_10
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import lqh.hchomework.Utils
@@ -29,8 +26,9 @@ class SportView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         private const val text = "good"
 
-        private val fontMetrics = Paint.FontMetrics()
     }
+
+    private val metrics = Paint.FontMetrics()
 
     private val bound = Rect()
 
