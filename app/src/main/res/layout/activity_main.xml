@@ -6,7 +6,8 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <lqh.hchomework.h4_10.CameraView
+    <lqh.hchomework.h4_11.FancyView
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

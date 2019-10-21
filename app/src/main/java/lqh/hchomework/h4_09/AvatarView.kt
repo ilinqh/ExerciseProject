@@ -34,6 +34,7 @@ class AvatarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     init {
         avatar = Utils.getAvatar(resources, (RADIUS * 2).toInt())
+        setLayerType(LAYER_TYPE_HARDWARE, null)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -45,23 +46,17 @@ class AvatarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             height / 2f + RADIUS
         )
         border.set(
-            width / 2f - RADIUS - BORDER_WIDTH,
-            height / 2f - RADIUS - BORDER_WIDTH,
-            width / 2f + RADIUS + BORDER_WIDTH,
-            height / 2f + RADIUS + BORDER_WIDTH
+            width / 2f - RADIUS - BORDER_WIDTH / 2,
+            height / 2f - RADIUS - BORDER_WIDTH / 2,
+            width / 2f + RADIUS + BORDER_WIDTH / 2,
+            height / 2f + RADIUS + BORDER_WIDTH / 2
         )
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        paint.color = Color.parseColor("#FDD835")
-        paint.strokeWidth = BORDER_WIDTH
-        canvas.drawOval(border, paint)
-
-        val saved = canvas.saveLayer(cut, paint)
         canvas.drawOval(cut, paint)
-
         paint.xfermode = xfermode
         canvas.drawBitmap(
             avatar,
@@ -71,7 +66,11 @@ class AvatarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         )
         paint.xfermode = null
 
-        canvas.restoreToCount(saved)
+        paint.color = Color.parseColor("#FDD835")
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = BORDER_WIDTH
+        canvas.drawArc(border, 0f, 360f, false, paint)
+
     }
 
 }
