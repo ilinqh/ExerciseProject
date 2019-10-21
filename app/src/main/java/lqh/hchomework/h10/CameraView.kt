@@ -8,9 +8,12 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import lqh.hchomework.Utils
-import lqh.hchomework.Utils.Companion.getZForCamera
 
-class CameraView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, def: Int = 0) :
+class CameraView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    def: Int = 0
+) :
     View(context, attrs, def) {
 
     companion object {
@@ -39,7 +42,7 @@ class CameraView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         camera.rotateX(45f)
         // 三维旋转需要做多这一步处理，避免一些高密度手机出现糊脸效果
-        camera.setLocation(0f, 0f, getZForCamera())
+        camera.setLocation(0f, 0f, Utils.getZForCamera())
     }
 
     override fun onDraw(canvas: Canvas) {
