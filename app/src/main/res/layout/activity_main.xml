@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <lqh.hchomework.h15.ScalableImageView
+    <lqh.hchomework.h4_09.AvatarView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
