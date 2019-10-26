@@ -6,9 +6,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <lqh.hchomework.h4_11.FancyView
+    <lqh.hchomework.art03.FollowView
         android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        android:background="@color/colorAccent" />
 
 </LinearLayout>
