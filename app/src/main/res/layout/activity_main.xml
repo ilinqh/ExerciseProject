@@ -6,17 +6,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
+    <lqh.hchomework.h4_18.ScalableImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <lqh.hchomework.view.TouchView
-        android:id="@+id/touchView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@color/colorAccent"
-        android:layout_centerInParent="true"
-        android:layout_margin="8dp" />
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>
