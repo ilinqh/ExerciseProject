@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
@@ -49,6 +50,9 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
     private var originOffsetX: Float = 0f
     private var originOffsetY: Float = 0f
 
+    /**
+     * 最大偏移量，防止移除边界
+     */
     private var maxOffsetX = 0f
     private var maxOffsetY = 0f
 
@@ -56,17 +60,24 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
 
     private var big: Boolean = false
 
-    var scaleFraction: Float = 0f
+    private var currentScale: Float = 0f
         set(value) {
             field = value
             invalidate()
         }
 
-    private val scaleAnimator by lazy {
-        ObjectAnimator.ofFloat(this, "scaleFraction", 0f, 1f)
-    }
+    private var scaleAnimator: ObjectAnimator? = null
+        get() {
+            if (field == null) {
+                field = ObjectAnimator.ofFloat(this, "currentScale", 0f)
+            }
+            field?.setFloatValues(smallScale, bigScale)
+            return field
+        }
 
     private val scroller: OverScroller
+
+    private val scaleDetector: ScaleGestureDetector
 
     init {
         bitmap = Utils.getAvatar(resources, IMAGE_WIDTH.toInt())
@@ -74,6 +85,7 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
         detector.setOnDoubleTapListener(this)
 
         scroller = OverScroller(context)
+        scaleDetector = ScaleGestureDetector(context, MyScaleListener())
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -89,18 +101,24 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
 
         maxOffsetX = abs((width - bitmap.width * bigScale) / 2f)
         maxOffsetY = abs((height - bitmap.height * bigScale) / 2f)
+
+        currentScale = smallScale
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val scale = smallScale + (bigScale - smallScale) * scaleFraction
-        canvas.translate(offsetX, offsetY)
-        canvas.scale(scale, scale, width / 2f, height / 2f)
+        val scaleFraction = (currentScale - smallScale) / (bigScale - smallScale)
+        canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction)
+        canvas.scale(currentScale, currentScale, width / 2f, height / 2f)
         canvas.drawBitmap(bitmap, originOffsetX, originOffsetY, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return detector.onTouchEvent(event)
+        var result = scaleDetector.onTouchEvent(event)
+        if (!scaleDetector.isInProgress) {
+            result = detector.onTouchEvent(event)
+        }
+        return result
     }
 
     override fun onShowPress(e: MotionEvent) {
@@ -136,7 +154,9 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
                 -maxOffsetX.toInt(),
                 maxOffsetX.toInt(),
                 -maxOffsetY.toInt(),
-                maxOffsetY.toInt()
+                maxOffsetY.toInt(),
+                Utils.dp2px(20f).toInt(),
+                Utils.dp2px(20f).toInt()
             )
             postOnAnimation(this)
         }
@@ -168,13 +188,17 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
         if (big) {
             offsetX -= distanceX
             offsetY -= distanceY
-            offsetX = max(offsetX, -maxOffsetX)
-            offsetX = min(offsetX, maxOffsetX)
-            offsetY = max(offsetY, -maxOffsetY)
-            offsetY = min(offsetY, maxOffsetY)
+            fixOffset()
             invalidate()
         }
         return false
+    }
+
+    private fun fixOffset() {
+        offsetX = max(offsetX, -maxOffsetX)
+        offsetX = min(offsetX, maxOffsetX)
+        offsetY = max(offsetY, -maxOffsetY)
+        offsetY = min(offsetY, maxOffsetY)
     }
 
     override fun onLongPress(e: MotionEvent) {
@@ -185,9 +209,12 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
         // 双击事件，第二次点击事件中，仅按下(ACTION_DOWN)时触发
         big = !big
         if (big) {
-            scaleAnimator.start()
+            offsetX = (e.x - width / 2f) * (1 - bigScale / smallScale)
+            offsetY = (e.y - height / 2f) * (1 - bigScale / smallScale)
+            fixOffset()
+            scaleAnimator?.start()
         } else {
-            scaleAnimator.reverse()
+            scaleAnimator?.reverse()
         }
         return false
     }
@@ -202,4 +229,31 @@ class ScalableImageView(context: Context, attrs: AttributeSet) : View(context, a
         return false
     }
 
+    inner class MyScaleListener : ScaleGestureDetector.OnScaleGestureListener {
+
+        private var initialCurrentScale = 0f
+
+        /**
+         * @return 是否消费缩放时间
+         */
+        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+            initialCurrentScale = currentScale
+            return true
+        }
+
+        override fun onScaleEnd(detector: ScaleGestureDetector?) {
+
+        }
+
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            // 放缩倍数     detector.scaleFactor
+            // 放缩中心     detector.focusX
+            // 放缩中心     detector.focusY
+            currentScale = initialCurrentScale * detector.scaleFactor
+            invalidate()
+            return false
+        }
+
+    }
 }
+
