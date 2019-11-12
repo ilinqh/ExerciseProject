@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <lqh.hchomework.h4_18.ScalableImageView
+    <lqh.hchomework.h4_19.MultiTouchView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true" />
