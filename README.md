@@ -21,5 +21,3 @@
 
 7. TagLayout<br>
 ![TagLayout](https://github.com/savage-lin/ExerciseProject/raw/master/images/TagLayout.png)
-
-1213
